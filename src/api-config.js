@@ -4,7 +4,7 @@ const apiVersion = 'v1';
 const hostname = window && window.location && window.location.hostname;
 
 if(hostname === 'react-test-munir925.c9users.io') {
-  backendHost = 'https://react-test-munir925.c9users.io/';
+  backendHost = 'https://rails-api-test-munir925.c9users.io';
 } else if(hostname === 'localhost') {
   backendHost = 'http://localhost:3001';
 } else if(/^qa/.test(hostname)) {
