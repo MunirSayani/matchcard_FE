@@ -1,14 +1,13 @@
 import React from 'react';
-import PayPerViewsContainer from './components/PayPerView/PayPerViewsContainer';
-import './App.css';
+import { Route } from 'react-router-dom';
+import HomePage from './components/pages/HomePage';
+import LoginPage from './components/pages/LoginPage';
 
-export default function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Pay Per Viewss</h1>
-      </header>
-      <PayPerViewsContainer />
-    </div>
-  );
-}
+const App = () => (
+  <div>
+    <Route path="/" exact component={HomePage} />
+    <Route path="/login" exact component={LoginPage} />
+  </div>
+);
+
+export default App;
