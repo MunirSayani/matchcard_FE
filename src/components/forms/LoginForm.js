@@ -26,7 +26,10 @@ class LoginForm extends React.Component {
       this.setState({ loading: true });
       this.props.submit(this.state.data).catch(err => {
         this.setState({
-          errors: { ...this.state.errors, global: err.response },
+          errors: {
+            ...this.state.errors,
+            global: err.response.data.error.global
+          },
           loading: false
         });
       });
@@ -48,6 +51,7 @@ class LoginForm extends React.Component {
         {errors.global && (
           <Message negative>
             <Message.Header> Login credentials are incorrect. </Message.Header>
+            <p>{errors.global}</p>
           </Message>
         )}
         <Form.Field error={!!errors.email}>
