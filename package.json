@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "AsyncStorage": "^0.1.5",
     "axios": "^0.18.0",
     "immutability-helper": "^2.7.1",
     "prop-types": "^15.6.2",

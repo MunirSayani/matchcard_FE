@@ -1,4 +1,4 @@
-import { USER_LOGGED_IN } from '../types';
+import { USER_LOGGED_IN, USER_LOGGED_OUT } from '../types';
 import api from '../api';
 
 export const userLoggedIn = user => ({
@@ -6,9 +6,17 @@ export const userLoggedIn = user => ({
   user
 });
 
+export const userLoggedOut = () => ({
+  type: USER_LOGGED_OUT
+});
+
 export const login = auth => dispatch =>
   api.user.login(auth).then(user => {
-    console.log('in auth.js', user);
+    localStorage.appJWT = user.token;
     dispatch(userLoggedIn(user));
-    console.log('dispatched');
   });
+
+export const logout = () => dispatch => {
+  localStorage.removeItem('appJWT');
+  dispatch(userLoggedOut());
+};
