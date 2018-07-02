@@ -12,7 +12,6 @@ export const userLoggedOut = () => ({
 
 export const login = auth => dispatch =>
   api.user.login(auth).then(user => {
-    localStorage.appJWT = user.token;
     dispatch(userLoggedIn(user));
   });
 
