@@ -19,3 +19,8 @@ export const logout = () => dispatch => {
   localStorage.removeItem('appJWT');
   dispatch(userLoggedOut());
 };
+
+export const confirm = token => dispatch =>
+  api.user.confirm(token).then(user => {
+    dispatch(userLoggedIn(user));
+  });

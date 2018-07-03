@@ -9,6 +9,10 @@
     core-js "^2.5.7"
     regenerator-runtime "^0.11.1"
 
+AsyncStorage@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/AsyncStorage/-/AsyncStorage-0.1.5.tgz#06ddfad088dd487e703208d3c86071115549e803"
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -4269,6 +4273,10 @@ jsx-ast-utils@^2.0.0, jsx-ast-utils@^2.0.1:
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-2.0.1.tgz#e801b1b39985e20fffc87b40e3748080e2dcac7f"
   dependencies:
     array-includes "^3.0.3"
+
+jwt-decode@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
 
 keyboard-key@^1.0.1:
   version "1.0.1"
