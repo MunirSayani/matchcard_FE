@@ -1,27 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as actions from '../../actions/auth';
+import FeaturedMatchCardsContainer from '../featured/FeaturedMatchCardsContainer';
 
-const HomePage = ({ isAuthenticated, logout }) => (
-  <div>
-    <h1>HomePage</h1>
-    {isAuthenticated ? (
-      <button onClick={() => logout()}>Logout </button>
-    ) : (
+class HomePage extends React.Component {
+  state = {};
+
+  render() {
+    return (
       <div>
-        <Link to="/login">Login</Link>
-        <br />
-        <Link to="/signup">Signup</Link>
+        <FeaturedMatchCardsContainer />
       </div>
-    )}
-  </div>
-);
+    );
+  }
+}
 
 HomePage.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
-  logout: PropTypes.func.isRequired
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
@@ -30,7 +25,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { logout: actions.logout }
-)(HomePage);
+export default connect(mapStateToProps)(HomePage);

@@ -10,6 +10,15 @@ export default {
     confirm: token =>
       axios
         .post(API_ROOT + '/users/confirm', { token })
-        .then(res => res.data.user)
+        .then(res => res.data.user),
+    resetPasswordRequest: email =>
+      axios.post(API_ROOT + '/users/reset_password_request', { email }),
+    validateToken: token => axios.post(API_ROOT + '/validate_token', { token }),
+    resetPassword: data =>
+      axios.post(API_ROOT + '/users/reset_password', { data })
+  },
+  feature: {
+    loadFeatureMatches: () =>
+      axios.get(API_ROOT + '/leagues/featured_match_cards', {})
   }
 };

@@ -5,6 +5,7 @@
   "dependencies": {
     "AsyncStorage": "^0.1.5",
     "axios": "^0.18.0",
+    "gravatar-url": "^2.0.0",
     "immutability-helper": "^2.7.1",
     "jwt-decode": "^2.2.0",
     "prop-types": "^15.6.2",
