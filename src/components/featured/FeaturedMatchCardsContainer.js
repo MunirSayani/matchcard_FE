@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Message, Icon } from 'semantic-ui-react';
-import { loadFeatureMatches } from '../../actions/feature';
+import { loadFeatureMatchCards } from '../../actions/feature';
 import FeaturedMatchCard from './FeaturedMatchCard';
 
 class FeaturedMatchCardsContainer extends React.Component {
@@ -11,9 +11,9 @@ class FeaturedMatchCardsContainer extends React.Component {
   };
 
   componentDidMount() {
-    const { loadFeatureMatches } = this.props;
+    const { loadFeatureMatchCards } = this.props;
 
-    loadFeatureMatches()
+    loadFeatureMatchCards()
       .then(() => this.setState({ loading: false, success: true }))
       .catch(() => this.setState({ loading: false, success: false }));
   }
@@ -63,5 +63,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { loadFeatureMatches }
+  { loadFeatureMatchCards }
 )(FeaturedMatchCardsContainer);

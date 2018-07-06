@@ -1,12 +1,12 @@
-import { FEATURE_SELECTED } from '../types';
+import { FEATURE_LOADED } from '../types';
 import api from '../api';
 
-export const featureSelected = feature => ({
-  type: FEATURE_SELECTED,
+export const featureLoaded = feature => ({
+  type: FEATURE_LOADED,
   feature
 });
 
-export const loadFeatureMatches = () => dispatch =>
+export const loadFeatureMatchCards = () => dispatch =>
   api.feature.loadFeatureMatches().then(resp => {
-    dispatch(featureSelected(resp.data));
+    dispatch(featureLoaded(resp.data));
   });

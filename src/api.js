@@ -20,5 +20,10 @@ export default {
   feature: {
     loadFeatureMatches: () =>
       axios.get(API_ROOT + '/leagues/featured_match_cards', {})
+  },
+  matchcard: {
+    loadMatchCard: id => axios.get(API_ROOT + '/match_cards/' + id, {}),
+    updateMatchCard: match_card =>
+      axios.put(API_ROOT + '/match_cards/' + match_card.id, { match_card })
   }
 };

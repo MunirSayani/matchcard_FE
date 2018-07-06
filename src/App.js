@@ -11,6 +11,7 @@ import DashboardPage from './components/pages/DashboardPage';
 import UserRoute from './components/routes/UserRoute';
 import GuestRoute from './components/routes/GuestRoute';
 import TopNavigation from './components/navigation/TopNavigation';
+import EditMatchCardPage from './components/pages/EditMatchCardPage';
 
 const App = ({ location }) => (
   <div className="ui container">
@@ -46,6 +47,12 @@ const App = ({ location }) => (
       path="/dashboard"
       exact
       component={DashboardPage}
+    />
+    <UserRoute
+      location={location}
+      path="/edit_match_card/:id"
+      exact
+      component={EditMatchCardPage}
     />
   </div>
 );
