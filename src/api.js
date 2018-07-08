@@ -24,6 +24,8 @@ export default {
   matchcard: {
     loadMatchCard: id => axios.get(API_ROOT + '/match_cards/' + id, {}),
     updateMatchCard: match_card =>
-      axios.put(API_ROOT + '/match_cards/' + match_card.id, { match_card })
+      axios.put(API_ROOT + '/match_cards/' + match_card.id, { match_card }),
+    createMatch: match => axios.post(API_ROOT + '/matches', match),
+    deleteMatch: id => axios.delete(API_ROOT + '/matches/' + id, {})
   }
 };

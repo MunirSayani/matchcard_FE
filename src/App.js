@@ -12,6 +12,7 @@ import UserRoute from './components/routes/UserRoute';
 import GuestRoute from './components/routes/GuestRoute';
 import TopNavigation from './components/navigation/TopNavigation';
 import EditMatchCardPage from './components/pages/EditMatchCardPage';
+import './styles/_app.scss';
 
 const App = ({ location }) => (
   <div className="ui container">

@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Message } from 'semantic-ui-react';
 import EditMatchCardForm from '../forms/EditMatchCardForm';
-import { loadMatchCard, updateMatchCard } from '../../actions/match_card';
+import {
+  loadMatchCard,
+  updateMatchCard,
+  createMatch
+} from '../../actions/match_card';
 
 class EditMatchCardPage extends React.Component {
   state = {
@@ -44,6 +48,7 @@ class EditMatchCardPage extends React.Component {
               submit={this.submit}
               match_card={this.props.match_card}
               onChange={this.onChange}
+              newMatch={this.newMatch}
             />
           )}
         {!loading && !success && <Message>Invalid Token</Message>}
@@ -73,5 +78,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { loadMatchCard, updateMatchCard }
+  { loadMatchCard, updateMatchCard, createMatch }
 )(EditMatchCardPage);

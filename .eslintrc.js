@@ -15,6 +15,17 @@ module.exports = {
     node: true
   },
   rules: {
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }]
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'jsx-a11y/label-has-for': [
+      2,
+      {
+        components: ['Label'],
+        required: {
+          some: ['nesting', 'id']
+        },
+        allowChildren: false
+      }
+    ],
+    'no-shadow': 'off'
   }
 };
