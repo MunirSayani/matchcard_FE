@@ -1,43 +1,47 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Message } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import EditMatchCardForm from '../forms/EditMatchCardForm';
-import {
-  loadMatchCard,
-  updateMatchCard,
-  createMatch
-} from '../../actions/match_card';
+import { loadMatchCard, updateMatchCard } from '../../actions/match_card';
 
 class EditMatchCardPage extends React.Component {
   state = {
     loading: true,
-    success: false,
-    savedData: false
+    success: false
+    // savedData: false
   };
 
   componentDidMount() {
-    this.props
-      .loadMatchCard(this.props.match.params.id)
+    const { loadMatchCard, match } = this.props;
+    const { params } = match;
+    const { id } = params;
+    loadMatchCard(id)
       .then(() => this.setState({ loading: false, success: true }))
       .catch(() => this.setState({ loading: false, success: false }));
   }
 
-  onChange = e =>
+  onChange = () =>
     this.setState({
-      savedData: false
+      // savedData: false
     });
 
-  submit = data =>
-    this.props.updateMatchCard(data).then(() =>
+  submit = data => {
+    const { updateMatchCard } = this.props;
+
+    return updateMatchCard(data).then(() =>
       this.setState({
         loading: false
       })
     );
+  };
 
   render() {
-    const { loading, success, savedData } = this.state;
-    const token = this.props.match.params.token;
+    const { loading, success } = this.state;
+    // eslint-disable-next-line
+    const { match_card } = this.props;
+    // const { params } = match;
+    // const { token } = params;
 
     return (
       <div>
@@ -46,7 +50,8 @@ class EditMatchCardPage extends React.Component {
           success && (
             <EditMatchCardForm
               submit={this.submit}
-              match_card={this.props.match_card}
+              // eslint-disable-next-line
+              match_card={match_card}
               onChange={this.onChange}
               newMatch={this.newMatch}
             />
@@ -63,20 +68,17 @@ function mapStateToProps(state) {
   };
 }
 
-// EditMatchCardPage.propTypes = {
-//   validateToken: PropTypes.func.isRequired,
-//   resetPassword: PropTypes.func.isRequired,
-//   match: PropTypes.shape({
-//     params: PropTypes.shape({
-//       token: PropTypes.string.isRequired
-//     }).isRequired
-//   }).isRequired,
-//   history: PropTypes.shape({
-//     push: PropTypes.func.isRequired
-//   }).isRequired
-// };
+EditMatchCardPage.propTypes = {
+  loadMatchCard: PropTypes.func.isRequired,
+  updateMatchCard: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired
+};
 
 export default connect(
   mapStateToProps,
-  { loadMatchCard, updateMatchCard, createMatch }
+  { loadMatchCard, updateMatchCard }
 )(EditMatchCardPage);

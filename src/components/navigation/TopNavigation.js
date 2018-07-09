@@ -38,7 +38,7 @@ const TopNavigation = ({ user, logout }) => (
 TopNavigation.propTypes = {
   user: PropTypes.shape({
     email: PropTypes.string.isRequired
-  }),
+  }).isRequired,
   logout: PropTypes.func.isRequired
 };
 

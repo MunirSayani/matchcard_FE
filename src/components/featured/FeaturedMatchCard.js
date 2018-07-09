@@ -1,8 +1,8 @@
 import React from 'react';
-import placeholder from '../../images/placeholder.jpg';
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import placeholder from '../../images/placeholder.jpg';
 
 const FeaturedMatchCard = ({ matchcard }) => (
   <div className="ui card">
@@ -15,6 +15,7 @@ const FeaturedMatchCard = ({ matchcard }) => (
       <div className="description">
         <Button
           as={Link}
+          // eslint-disable-next-line
           to={'/edit_match_card/' + matchcard.id}
           className="ui primary"
         >
@@ -27,7 +28,7 @@ const FeaturedMatchCard = ({ matchcard }) => (
 );
 
 FeaturedMatchCard.propTypes = {
-  matchcard: PropTypes.object
+  matchcard: PropTypes.shape({}).isRequired
 };
 
 export default FeaturedMatchCard;

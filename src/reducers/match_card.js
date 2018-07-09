@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { MATCHCARD_LOADED, MATCH_CREATED, MATCH_DELETED } from '../types';
 
+// eslint-disable-next-line
 export default function match_card(state = {}, action = {}) {
   switch (action.type) {
     case MATCHCARD_LOADED:

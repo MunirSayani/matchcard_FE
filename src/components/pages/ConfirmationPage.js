@@ -12,8 +12,8 @@ class ConfirmationPage extends React.Component {
   };
 
   componentDidMount() {
-    this.props
-      .confirm(this.props.match.params.token)
+    const { match, confirm } = this.props;
+    confirm(match.params.token)
       .then(() => this.setState({ loading: false, success: true }))
       .catch(() => this.setState({ loading: false, success: false }));
   }

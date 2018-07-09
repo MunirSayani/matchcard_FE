@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Message, Icon } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import { loadFeatureMatchCards } from '../../actions/feature';
 import FeaturedMatchCard from './FeaturedMatchCard';
 
@@ -33,11 +34,9 @@ class FeaturedMatchCardsContainer extends React.Component {
         {!loading &&
           success && (
             <div className="ui cards">
-              {matchcards.map(matchcard => {
-                return (
-                  <FeaturedMatchCard matchcard={matchcard} key={matchcard.id} />
-                );
-              })}
+              {matchcards.map(matchcard => (
+                <FeaturedMatchCard matchcard={matchcard} key={matchcard.id} />
+              ))}
             </div>
           )}
 
@@ -60,6 +59,11 @@ function mapStateToProps(state) {
     matchcards: state.feature.matchcards
   };
 }
+
+FeaturedMatchCardsContainer.propTypes = {
+  loadFeatureMatchCards: PropTypes.func.isRequired,
+  matchcards: PropTypes.shape({}).isRequired
+};
 
 export default connect(
   mapStateToProps,

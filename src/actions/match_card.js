@@ -1,6 +1,7 @@
 import { MATCHCARD_LOADED, MATCH_CREATED, MATCH_DELETED } from '../types';
 import api from '../api';
 
+// eslint-disable-next-line
 export const matchCardLoaded = match_card => ({
   type: MATCHCARD_LOADED,
   match_card
@@ -16,8 +17,8 @@ export const deletedMatch = matchId => ({
   matchId
 });
 
-export const updateMatchCard = data => dispatch =>
-  api.matchcard.updateMatchCard(data);
+export const updateMatchCard = data => () =>
+  api.matchcard.updateMatchCard(data).then(res => res);
 
 export const loadMatchCard = id => dispatch =>
   api.matchcard.loadMatchCard(id).then(resp => {

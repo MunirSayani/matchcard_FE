@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import FeaturedMatchCardsContainer from '../featured/FeaturedMatchCardsContainer';
 
 class HomePage extends React.Component {
@@ -16,12 +15,12 @@ class HomePage extends React.Component {
 }
 
 HomePage.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired
+  // isAuthenticated: PropTypes.bool.isRequired
 };
 
-function mapStateToProps(state) {
+function mapStateToProps() {
   return {
-    isAuthenticated: !!state.user.token
+    // isAuthenticated: !!state.user.token
   };
 }
 

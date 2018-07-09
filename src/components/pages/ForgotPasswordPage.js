@@ -10,15 +10,16 @@ class ForgotPasswordPage extends React.Component {
     success: false
   };
 
-  submit = data =>
-    this.props
-      .resetPasswordRequest(data)
-      .then(() => this.setState({ success: true }));
+  submit = data => {
+    const { resetPasswordRequest } = this.props;
+    resetPasswordRequest(data).then(() => this.setState({ success: true }));
+  };
 
   render() {
+    const { success } = this.state;
     return (
       <div>
-        {this.state.success ? (
+        {success ? (
           <Message>Email has been sent.</Message>
         ) : (
           <ForgotPasswordForm submit={this.submit} />

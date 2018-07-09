@@ -12,20 +12,22 @@ class ResetPasswordPage extends React.Component {
   };
 
   componentDidMount() {
-    this.props
-      .validateToken(this.props.match.params.token)
+    const { validateToken, match } = this.props;
+    validateToken(match.params.token)
       .then(() => this.setState({ loading: false, success: true }))
       .catch(() => this.setState({ loading: false, success: false }));
   }
 
-  submit = data =>
-    this.props
-      .resetPassword(data)
-      .then(() => this.props.history.push('/login'));
+  submit = data => {
+    const { resetPassword, history } = this.props;
+    return resetPassword(data).then(() => history.push('/login'));
+  };
 
   render() {
     const { loading, success } = this.state;
-    const token = this.props.match.params.token;
+    const { match } = this.props;
+    const { params } = match;
+    const { token } = params;
 
     return (
       <div>

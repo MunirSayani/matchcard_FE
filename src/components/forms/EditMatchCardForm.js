@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Form, Button, Message } from 'semantic-ui-react';
 import InlineError from '../messages/InlineError';
 import { deleteMatch, createMatch } from '../../actions/match_card';
-import '../../styles/_app.scss';
 
 class EditMatchCardForm extends React.Component {
   state = {
@@ -44,12 +43,12 @@ class EditMatchCardForm extends React.Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const { submit } = this.props;
     const { data } = this.state;
 
     const errors = this.validate(data);
     this.setState({ errors });
     if (Object.keys(errors).length === 0) {
+      const { submit } = this.props;
       this.setState({ loading: true });
       submit(data)
         .then(() => {
@@ -59,7 +58,6 @@ class EditMatchCardForm extends React.Component {
           });
         })
         .catch(err => {
-          console.log('got error', err);
           this.setState({
             errors: err.response.data.errors,
             loading: false
@@ -102,6 +100,10 @@ class EditMatchCardForm extends React.Component {
 
     if (!data.title) errors.title = "Can't be blank";
 
+    _.forOwn(data.matches, (value, key) => {
+      if (!value.name) errors[key] = { name: "Can't be blank" };
+    });
+
     return errors;
   };
 
@@ -110,59 +112,99 @@ class EditMatchCardForm extends React.Component {
     const { createMatch } = this.props;
     const { data } = this.state;
 
-    createMatch({ match: { match_card_id: data.id } }).catch(err => {
-      console.log(err);
-
+    createMatch({ match: { match_card_id: data.id } }).catch(() => {
       // TODO CATCH ERROR
     });
   };
+
+  // newContender = key => {
+  //   const contender = { name: '' };
+  //   const { data } = this.state;
+  //   // const updatedMatch = {
+  //   //   [key]: data.matches[key].contenders.concat(contender)
+  //   // };
+
+  //   const updateContenders = data.matches[key].contenders.concat(contender);
+
+  //   console.log(updateContenders);
+
+  //   this.setState(prevState => ({
+  //     ...prevState,
+  //     data: {
+  //       ...prevState.data,
+  //       matches: {
+  //         ...prevState.data.matches
+  //       }
+  //     }
+  //   }));
+  // };
 
   handleDeleteMatch = id => {
     const { deleteMatch } = this.props;
 
-    deleteMatch(id).catch(err => {
-      console.log(err);
-
+    deleteMatch(id).catch(() => {
       // TODO CATCH ERROR
     });
   };
 
+  renderContenders = contenders =>
+    contenders.map(c => <div className="one column row">{c.name}</div>);
+
   renderMatches = (matches, errors) =>
     Object.keys(matches).map(key => (
-      <Form.Field key={key} className="inline">
-        {/* error={!_.isEmpty(errors[key])} */}
-        <label htmlFor="Name">Match Name</label>
-        <input
-          type="name"
-          id={key}
-          name="name"
-          placeholder="Match Name"
-          defaultValue={matches[key].name}
-          onChange={this.changeMatchAttributes}
-        />
-        {!_.isEmpty(errors[key]) && (
-          <div
-            className="ui red left pointing basic label"
-            style={{ backgroundColor: '#fff !important' }}
-          >
-            Please enter a value
+      <div className="ui padded segment center" key={key}>
+        <i className="ui right corner label link" type="link">
+          <i
+            onClick={() => this.handleDeleteMatch(key)}
+            aria-hidden="true"
+            className="delete icon red link"
+          />
+        </i>
+
+        <div className="ui grid">
+          <div className="two column row">
+            <div className="left floated column">
+              <Form.Field error={!_.isEmpty(errors[key])}>
+                <label htmlFor="Name">Match Name</label>
+                <input
+                  type="name"
+                  id={key}
+                  name="name"
+                  placeholder="Match Name"
+                  defaultValue={matches[key].name}
+                  onChange={this.changeMatchAttributes}
+                />
+                {!_.isEmpty(errors[key]) && (
+                  <div
+                    className="ui red left pointing basic label"
+                    style={{ backgroundColor: '#fff !important' }}
+                  >
+                    {errors[key].name}
+                  </div>
+                )}
+                {/* {!_.isEmpty(errors[key]) && <InlineError text={errors[key].name} />} */}
+              </Form.Field>
+            </div>
+            {/* <div className="right floated column">right test</div> */}
           </div>
-        )}
-        <i
-          onClick={() => this.handleDeleteMatch(key)}
-          aria-hidden="true"
-          className="delete icon red link"
-        />
-        {console.log(errors[key])}
-        {/* {!_.isEmpty(errors[key]) && <InlineError text={errors[key].name} />} */}
-      </Form.Field>
+          <div className="ui padded grid">
+            {!!matches[key].contenders &&
+              this.renderContenders(matches[key].contenders)}
+            {/* <div className="ui column padded">
+              <Button onClick={() => this.newContender(key)}>
+                Add Contender
+              </Button>
+            </div> */}
+          </div>
+        </div>
+      </div>
     ));
 
   render() {
     const { data, loading, errors, savedData } = this.state;
 
     return (
-      <div>
+      <div className="ui container match_card">
         <Form onSubmit={this.onSubmit} loading={loading} className="container">
           {savedData && (
             <Message className="ui positive message">Success!</Message>
@@ -188,9 +230,18 @@ class EditMatchCardForm extends React.Component {
             />
             {errors.title && <InlineError text={errors.title} />}
           </Form.Field>
-          {this.renderMatches(data.matches, errors)}
-          <Button onClick={this.newMatch}>Add Match</Button>
-          <Button primary>Save</Button>
+          <div className="ui padded grid">
+            <div className="column">
+              {this.renderMatches(data.matches, errors)}
+              <div className="ui column padded">
+                <Button onClick={this.newMatch}>Add Match</Button>
+              </div>
+            </div>
+          </div>
+
+          <Button className="ui bottom attached button" role="button" primary>
+            Save
+          </Button>
         </Form>
       </div>
     );
