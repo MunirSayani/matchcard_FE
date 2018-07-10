@@ -4,6 +4,7 @@ import { Message } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import EditMatchCardForm from '../forms/EditMatchCardForm';
 import { loadMatchCard, updateMatchCard } from '../../actions/match_card';
+import { loadEntities } from '../../actions/entities';
 
 class EditMatchCardPage extends React.Component {
   state = {
@@ -13,11 +14,15 @@ class EditMatchCardPage extends React.Component {
   };
 
   componentDidMount() {
-    const { loadMatchCard, match } = this.props;
+    const { loadMatchCard, match, loadEntities } = this.props;
     const { params } = match;
     const { id } = params;
     loadMatchCard(id)
-      .then(() => this.setState({ loading: false, success: true }))
+      .then(() => {
+        loadEntities().then(() =>
+          this.setState({ loading: false, success: true })
+        );
+      })
       .catch(() => this.setState({ loading: false, success: false }));
   }
 
@@ -39,24 +44,31 @@ class EditMatchCardPage extends React.Component {
   render() {
     const { loading, success } = this.state;
     // eslint-disable-next-line
-    const { match_card } = this.props;
+    const { match_card, entities } = this.props;
     // const { params } = match;
     // const { token } = params;
 
     return (
       <div>
-        {loading && <Message>Loading</Message>}
+        {loading && (
+          <div className="ui active transition visible inverted dimmer">
+            <div className="content">
+              <div className="ui inverted text loader">Loading</div>
+            </div>
+          </div>
+        )}
         {!loading &&
           success && (
             <EditMatchCardForm
               submit={this.submit}
               // eslint-disable-next-line
               match_card={match_card}
+              entities={entities}
               onChange={this.onChange}
               newMatch={this.newMatch}
             />
           )}
-        {!loading && !success && <Message>Invalid Token</Message>}
+        {!loading && !success && <Message>Oops! something went wrong.</Message>}
       </div>
     );
   }
@@ -71,6 +83,7 @@ function mapStateToProps(state) {
 EditMatchCardPage.propTypes = {
   loadMatchCard: PropTypes.func.isRequired,
   updateMatchCard: PropTypes.func.isRequired,
+  loadEntities: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired
@@ -80,5 +93,5 @@ EditMatchCardPage.propTypes = {
 
 export default connect(
   mapStateToProps,
-  { loadMatchCard, updateMatchCard }
+  { loadMatchCard, updateMatchCard, loadEntities }
 )(EditMatchCardPage);

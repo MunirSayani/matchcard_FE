@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Form, Button, Message } from 'semantic-ui-react';
+import { Form, Button, Message, Dropdown } from 'semantic-ui-react';
 import InlineError from '../messages/InlineError';
 import { deleteMatch, createMatch } from '../../actions/match_card';
 
@@ -78,6 +78,7 @@ class EditMatchCardForm extends React.Component {
 
   changeMatchAttributes = e => {
     const { target } = e;
+    console.log(target);
 
     this.setState(prevState => ({
       ...prevState,
@@ -147,6 +148,26 @@ class EditMatchCardForm extends React.Component {
     });
   };
 
+  renderMatchType = matchType => {
+    const { entities } = this.props;
+    const options = entities.map(e => ({ value: e.name, text: e.name }));
+
+    return (
+      <div>
+        <label htmlFor="type">Match Type</label> <br />
+        <Dropdown
+          placeholder="Select..."
+          name="match_type"
+          selection
+          search
+          options={options}
+          defaultValue={matchType}
+          onChange={this.changeMatchAttributes}
+        />
+      </div>
+    );
+  };
+
   renderContenders = contenders =>
     contenders.map(c => <div className="one column row">{c.name}</div>);
 
@@ -185,7 +206,9 @@ class EditMatchCardForm extends React.Component {
                 {/* {!_.isEmpty(errors[key]) && <InlineError text={errors[key].name} />} */}
               </Form.Field>
             </div>
-            {/* <div className="right floated column">right test</div> */}
+            <div className="right floated column">
+              {this.renderMatchType(matches[key].match_type)}
+            </div>
           </div>
           <div className="ui padded grid">
             {!!matches[key].contenders &&
@@ -202,6 +225,9 @@ class EditMatchCardForm extends React.Component {
 
   render() {
     const { data, loading, errors, savedData } = this.state;
+    const { entities } = this.props;
+
+    console.log(entities);
 
     return (
       <div className="ui container match_card">
@@ -252,6 +278,11 @@ EditMatchCardForm.propTypes = {
   submit: PropTypes.func.isRequired,
   createMatch: PropTypes.func.isRequired,
   deleteMatch: PropTypes.func.isRequired,
+  entities: PropTypes.arrayOf({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    description: PropTypes.string
+  }).isRequired,
   match_card: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -267,7 +298,8 @@ EditMatchCardForm.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    match_card: state.match_card
+    match_card: state.match_card,
+    entities: state.entities
   };
 }
 

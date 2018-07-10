@@ -28,5 +28,8 @@ export default {
       axios.put(`${API_ROOT}/match_cards/${match_card.id}`, { match_card }),
     createMatch: match => axios.post(`${API_ROOT}/matches`, match),
     deleteMatch: _id => axios.delete(`${API_ROOT}/matches/${_id}`, {})
+  },
+  entities: {
+    loadEntities: () => axios.get(`${API_ROOT}/entities`, {})
   }
 };

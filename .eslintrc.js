@@ -26,6 +26,13 @@ module.exports = {
         allowChildren: false
       }
     ],
+    'jsx-a11y/aria-role': [
+      2,
+      {
+        ignoreNonDOM: false
+      }
+    ],
+
     'no-shadow': 'off'
   }
 };
