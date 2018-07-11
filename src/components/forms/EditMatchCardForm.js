@@ -78,7 +78,6 @@ class EditMatchCardForm extends React.Component {
 
   changeMatchAttributes = e => {
     const { target } = e;
-    console.log(target);
 
     this.setState(prevState => ({
       ...prevState,
@@ -118,28 +117,6 @@ class EditMatchCardForm extends React.Component {
     });
   };
 
-  // newContender = key => {
-  //   const contender = { name: '' };
-  //   const { data } = this.state;
-  //   // const updatedMatch = {
-  //   //   [key]: data.matches[key].contenders.concat(contender)
-  //   // };
-
-  //   const updateContenders = data.matches[key].contenders.concat(contender);
-
-  //   console.log(updateContenders);
-
-  //   this.setState(prevState => ({
-  //     ...prevState,
-  //     data: {
-  //       ...prevState.data,
-  //       matches: {
-  //         ...prevState.data.matches
-  //       }
-  //     }
-  //   }));
-  // };
-
   handleDeleteMatch = id => {
     const { deleteMatch } = this.props;
 
@@ -148,21 +125,34 @@ class EditMatchCardForm extends React.Component {
     });
   };
 
-  renderMatchType = matchType => {
+  renderMatchType = (matchType, key) => {
     const { entities } = this.props;
     const options = entities.map(e => ({ value: e.name, text: e.name }));
 
     return (
       <div>
-        <label htmlFor="type">Match Type</label> <br />
+        <label htmlFor="type" name="test">
+          Match Type
+        </label>{' '}
+        <br />
         <Dropdown
+          id={key}
           placeholder="Select..."
           name="match_type"
           selection
           search
           options={options}
           defaultValue={matchType}
-          onChange={this.changeMatchAttributes}
+          onChange={(event, data) => {
+            const e = {
+              target: {
+                id: data.id,
+                name: data.name,
+                value: data.value
+              }
+            };
+            this.changeMatchAttributes(e);
+          }}
         />
       </div>
     );
@@ -207,7 +197,7 @@ class EditMatchCardForm extends React.Component {
               </Form.Field>
             </div>
             <div className="right floated column">
-              {this.renderMatchType(matches[key].match_type)}
+              {this.renderMatchType(matches[key].match_type, key)}
             </div>
           </div>
           <div className="ui padded grid">
