@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button } from 'semantic-ui-react';
-import InlineError from '../messages/InlineError';
+import _ from 'lodash';
+// import { Form, Button } from 'semantic-ui-react';
+// import InlineError from '../messages/InlineError';
 
 class ContendersForm extends React.Component {
   state = {
@@ -14,6 +15,24 @@ class ContendersForm extends React.Component {
     loading: false,
     errors: {}
   };
+  
+  componentWillMount() {
+    const { contenders } = this.props;
+    
+    console.log("recieved:", contenders);
+    if (_.isEmpty(contenders)) { 
+      console.log("no contenders found")
+      const designedContenders = [
+        { name: "Auto G 1"},
+        { name: "Auto G 1"}
+      ]
+      this.setState({ data: {contenders: designedContenders } });
+      
+    } else {
+      this.setState({ data: {contenders} });
+    }
+    
+  }
 
   onChange = e => {
     this.setState(prevState => ({
@@ -43,12 +62,24 @@ class ContendersForm extends React.Component {
       errors.password = 'Passwords must match';
     return errors;
   };
+  
+  renderContenders = contenders =>
+    contenders.map(c => <div className="one column row">{c.name}</div>);
 
   render() {
-    // const { errors, data, loading } = this.state;
-
+    const { errors, data, loading } = this.state;
+    console.log(errors);
+    console.log(data);
+    console.log(loading);
+    
+    const { contenders } = data;
     return (
-      <div />
+      <div> 
+        Match Contenders :
+        
+        {this.renderContenders(contenders)}
+      </div>
+      
       //   <Form onSubmit={this.onSubmit} loading={loading}>
       //     <Button primary>Reset</Button>
       //   </Form>
@@ -57,7 +88,11 @@ class ContendersForm extends React.Component {
 }
 
 ContendersForm.propTypes = {
-  submit: PropTypes.func.isRequired
+  submit: PropTypes.func.isRequired,
+  contenders: PropTypes.arrayOf({
+    id: PropTypes.number,
+    name: PropTypes.string
+  }).isRequired
   //   token: PropTypes.string.isRequired
 };
 

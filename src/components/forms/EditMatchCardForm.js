@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Button, Message, Dropdown } from 'semantic-ui-react';
+import ContendersForm from './ContendersForm';
 import InlineError from '../messages/InlineError';
 import { deleteMatch, createMatch } from '../../actions/match_card';
 
@@ -201,8 +202,7 @@ class EditMatchCardForm extends React.Component {
             </div>
           </div>
           <div className="ui padded grid">
-            {!!matches[key].contenders &&
-              this.renderContenders(matches[key].contenders)}
+             { <ContendersForm contenders={matches[key].contenders} />}
             {/* <div className="ui column padded">
               <Button onClick={() => this.newContender(key)}>
                 Add Contender
