@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-// import { Form, Button } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 // import InlineError from '../messages/InlineError';
 
 class ContendersForm extends React.Component {
@@ -15,23 +15,14 @@ class ContendersForm extends React.Component {
     loading: false,
     errors: {}
   };
-  
+
   componentWillMount() {
-    const { contenders } = this.props;
-    
-    console.log("recieved:", contenders);
-    if (_.isEmpty(contenders)) { 
-      console.log("no contenders found")
-      const designedContenders = [
-        { name: "Auto G 1"},
-        { name: "Auto G 1"}
-      ]
-      this.setState({ data: {contenders: designedContenders } });
-      
-    } else {
-      this.setState({ data: {contenders} });
-    }
-    
+    this.handleContenderState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('GOT PROPS!');
+    this.handleContenderState(nextProps);
   }
 
   onChange = e => {
@@ -62,24 +53,79 @@ class ContendersForm extends React.Component {
       errors.password = 'Passwords must match';
     return errors;
   };
-  
-  renderContenders = contenders =>
-    contenders.map(c => <div className="one column row">{c.name}</div>);
+
+  handleContenderState(nextProps) {
+    const { contenders, entities, match } = nextProps;
+
+    const entity = _.find(entities, { name: match.match_type });
+
+    if (
+      !_.isEmpty(contenders) &&
+      entity.contender_count === contenders.length
+    ) {
+      const designedContenders = _.map(contenders, c => {
+        const q = { id: Math.random(), name: c };
+        return q;
+      });
+
+      this.setState({ data: { contenders: designedContenders } });
+    } else {
+      console.log('contenders should be: ', entity.contender_count);
+      const designedContenders = _.times(entity.contender_count, () => {
+        const q = { id: Math.random(), name: 'test2' };
+        return q;
+      });
+      this.setState({ data: { contenders: designedContenders } });
+    }
+  }
+
+  renderContenders = c => {
+    const options = [
+      { value: 'contender1', text: 'contender1' },
+      { value: 'contender 2', text: 'contender 2' },
+      { value: 'test1', text: 'test1' },
+      { value: 'test2', text: 'test2' }
+    ];
+    // eslint-disable-next-line
+    const id = Math.random();
+    return (
+      <div key={id} className="one column row">
+        <Dropdown
+          id={c.id}
+          placeholder="Select..."
+          name="match_type"
+          selection
+          search
+          options={options}
+          defaultValue={c.name}
+          // onChange={(event, data) => {
+          //   const e = {
+          //     target: {
+          //       id: data.id,
+          //       name: data.name,
+          //       value: data.value
+          //     }
+          //   };
+          //   this.changeMatchAttributes(e);
+          // }}
+        />
+      </div>
+    );
+  };
 
   render() {
     const { errors, data, loading } = this.state;
     console.log(errors);
-    console.log(data);
+    // console.log(data);
     console.log(loading);
-    
+
     const { contenders } = data;
     return (
-      <div> 
+      <div>
         Match Contenders :
-        
-        {this.renderContenders(contenders)}
+        {contenders.map(c => this.renderContenders(c))}
       </div>
-      
+
       //   <Form onSubmit={this.onSubmit} loading={loading}>
       //     <Button primary>Reset</Button>
       //   </Form>
@@ -87,12 +133,53 @@ class ContendersForm extends React.Component {
   }
 }
 
+// renderContenders = (matchType, key) => {
+//   const { entities } = this.props;
+//   const options = entities.map(e => ({ value: e.name, text: e.name }));
+
+//   return (
+//     <div>
+//       <label htmlFor="type" name="test">
+//         Match Type
+//       </label>{' '}
+//       <br />
+//       <Dropdown
+//         id={key}
+//         placeholder="Select..."
+//         name="match_type"
+//         selection
+//         search
+//         options={options}
+//         defaultValue={matchType}
+//         onChange={(event, data) => {
+//           const e = {
+//             target: {
+//               id: data.id,
+//               name: data.name,
+//               value: data.value
+//             }
+//           };
+//           this.changeContenders(e);
+//         }}
+//       />
+//     </div>
+//   );
+// };
+
 ContendersForm.propTypes = {
-  submit: PropTypes.func.isRequired,
-  contenders: PropTypes.arrayOf({
-    id: PropTypes.number,
-    name: PropTypes.string
-  }).isRequired
+  submit: PropTypes.func.isRequired
+  // contenders: PropTypes.arrayOf({
+  //   id: PropTypes.number,
+  //   name: PropTypes.string
+  // }).isRequired,
+  // entities: PropTypes.arrayOf({
+  //   id: PropTypes.number,
+  //   name: PropTypes.string
+  // }).isRequired
+  // match: PropTypes.shape({
+  //   id: PropTypes.number,
+  //   name: PropTypes.string.isRequired
+  // }).isRequired
   //   token: PropTypes.string.isRequired
 };
 

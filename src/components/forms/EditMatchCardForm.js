@@ -160,10 +160,13 @@ class EditMatchCardForm extends React.Component {
   };
 
   renderContenders = contenders =>
-    contenders.map(c => <div className="one column row">{c.name}</div>);
+    contenders.map(c => <div className="one column row">{c}</div>);
 
-  renderMatches = (matches, errors) =>
-    Object.keys(matches).map(key => (
+  renderMatches = (matches, errors) => {
+    const { entities } = this.props;
+    // console.log(entities);
+
+    return Object.keys(matches).map(key => (
       <div className="ui padded segment center" key={key}>
         <i className="ui right corner label link" type="link">
           <i
@@ -202,7 +205,13 @@ class EditMatchCardForm extends React.Component {
             </div>
           </div>
           <div className="ui padded grid">
-             { <ContendersForm contenders={matches[key].contenders} />}
+            {
+              <ContendersForm
+                contenders={matches[key].contenders}
+                match={matches[key]}
+                entities={entities}
+              />
+            }
             {/* <div className="ui column padded">
               <Button onClick={() => this.newContender(key)}>
                 Add Contender
@@ -212,12 +221,11 @@ class EditMatchCardForm extends React.Component {
         </div>
       </div>
     ));
+  };
 
   render() {
     const { data, loading, errors, savedData } = this.state;
-    const { entities } = this.props;
-
-    console.log(entities);
+    // const { entities } = this.props;
 
     return (
       <div className="ui container match_card">
@@ -268,11 +276,13 @@ EditMatchCardForm.propTypes = {
   submit: PropTypes.func.isRequired,
   createMatch: PropTypes.func.isRequired,
   deleteMatch: PropTypes.func.isRequired,
-  entities: PropTypes.arrayOf({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    description: PropTypes.string
-  }).isRequired,
+  entities: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      contender_count: PropTypes.number.isRequired
+    })
+  ).isRequired,
   match_card: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
