@@ -125,17 +125,29 @@ class EditMatchCardForm extends React.Component {
       // TODO CATCH ERROR
     });
   };
+  
+  handleContenderChange = (contenders, matchID) => {
+    const e = { target: {
+                id: matchID,
+                name: "contenders",
+                value: contenders
+              }
+            };
+            
+   this.changeMatchAttributes(e);
+  }
 
   renderMatchType = (matchType, key) => {
     const { entities } = this.props;
-    const options = entities.map(e => ({ value: e.name, text: e.name }));
+    const options = _.filter(entities, 
+      {entity_type: 'Match'}
+    ).map(e => ({ value: e.name, text: e.name }));
 
     return (
-      <div>
+      <div className="field">
         <label htmlFor="type" name="test">
           Match Type
-        </label>{' '}
-        <br />
+        </label>
         <Dropdown
           id={key}
           placeholder="Select..."
@@ -159,9 +171,6 @@ class EditMatchCardForm extends React.Component {
     );
   };
 
-  renderContenders = contenders =>
-    contenders.map(c => <div className="one column row">{c}</div>);
-
   renderMatches = (matches, errors) => {
     const { entities } = this.props;
     // console.log(entities);
@@ -177,12 +186,12 @@ class EditMatchCardForm extends React.Component {
         </i>
 
         <div className="ui grid">
-          <div className="two column row">
+          <div className="doubling two column row">
             <div className="left floated column">
               <Form.Field error={!_.isEmpty(errors[key])}>
                 <label htmlFor="Name">Match Name</label>
                 <input
-                  type="name"
+                  type="text"
                   id={key}
                   name="name"
                   placeholder="Match Name"
@@ -204,12 +213,13 @@ class EditMatchCardForm extends React.Component {
               {this.renderMatchType(matches[key].match_type, key)}
             </div>
           </div>
-          <div className="ui padded grid">
+          <div className="ui grid">
             {
               <ContendersForm
                 contenders={matches[key].contenders}
                 match={matches[key]}
                 entities={entities}
+                handleContenderChange={this.handleContenderChange}
               />
             }
             {/* <div className="ui column padded">
@@ -245,7 +255,7 @@ class EditMatchCardForm extends React.Component {
           <Form.Field error={!!errors.title}>
             <label htmlFor="title">Title</label>
             <input
-              type="title"
+              type="text"
               id="title"
               name="title"
               placeholder="your new title"
@@ -280,7 +290,7 @@ EditMatchCardForm.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      contender_count: PropTypes.number.isRequired
+      contender_count: PropTypes.number
     })
   ).isRequired,
   match_card: PropTypes.shape({
