@@ -7,8 +7,8 @@ import update from 'immutability-helper';
 
 class ContendersForm extends React.Component {
   state = {
-    data: {}
-    // errors: {}
+    data: {},
+    errors: {}
   };
 
   componentWillMount() {
@@ -24,71 +24,91 @@ class ContendersForm extends React.Component {
       data: { ...prevState.data, [e.target.name]: e.target.value }
     }));
   };
-  
-  onContenderChange = (target) => {
+
+  onContenderChange = target => {
     const { data } = this.state;
-    const { contenders } =  data;
-    
-    const index = contenders.findIndex((c) => c.id === target.id);
-    const updatedContenders = update(contenders, {$splice: [[index, 1, target]]}); 
+    const { contenders } = data;
 
-    this.setState( { data: {contenders: updatedContenders } }, () => this.handleContenderChange())
-  }
-  
+    const index = contenders.findIndex(c => c.id === target.id);
+    const updatedContenders = update(contenders, {
+      $splice: [[index, 1, target]]
+    });
+
+    this.setState({ data: { contenders: updatedContenders } }, () =>
+      this.handleContenderChange()
+    );
+  };
+
   setContenderState(nextProps) {
-    const { contenders, entities, match } = nextProps;
-
+    const { contenders, entities, match, cerrors } = nextProps;
     const entity = _.find(entities, { name: match.match_type });
+    let designedContenders = [];
 
     if (
       !_.isEmpty(contenders) &&
       entity.contender_count === contenders.length
     ) {
-      const designedContenders = _.map(contenders, c => {
+      designedContenders = _.map(contenders, c => {
         const q = { id: Math.random(), name: c };
         return q;
       });
-
-      this.setState({ data: { contenders: designedContenders } });
     } else {
-      const designedContenders = _.times(entity.contender_count, () => {
+      designedContenders = _.times(entity.contender_count, () => {
         const q = { id: Math.random(), name: '' };
         return q;
       });
-      this.setState({ data: { contenders: designedContenders } });
     }
+
+    this.setState({
+      errors: cerrors,
+      data: { contenders: designedContenders }
+    });
   }
-  
+
   handleContenderChange = () => {
     const { handleContenderChange, match } = this.props;
     const { data } = this.state;
+    this.validate(data);
     const contenderList = _.map(data.contenders, 'name');
     handleContenderChange(contenderList, match.id);
-  }
-  
+  };
+
   validate = data => {
     const errors = {};
-    if (!data.password) errors.password = "Can't be blank";
+    const contendersList = _.map(data.contenders, 'name');
+    if (
+      Object.values(contendersList).length === _.compact(contendersList).length
+    ) {
+      console.log(contendersList);
+      console.log('good!');
+    } else {
+      console.log('bad!');
+    }
+    // if (!data.password) errors.password = "Can't be blank";
     return errors;
   };
 
-  optionsForContender = (matchType) => {
+  optionsForContender = matchType => {
     const { entities } = this.props;
-    const contenderType = _.result(_.find(entities, { 'name': matchType }), 'contender_type');
-    const options = _.filter(entities, 
-      {entity_type: 'Contender', contender_type: contenderType }
-    ).map(e => ({ value: e.name, text: e.name }));
-    return options
-  }
+    const contenderType = _.result(
+      _.find(entities, { name: matchType }),
+      'contender_type'
+    );
+    const options = _.filter(entities, {
+      entity_type: 'Contender',
+      contender_type: contenderType
+    }).map(e => ({ value: e.name, text: e.name }));
+    return options;
+  };
 
   renderContenders = c => {
-    const { match }  = this.props;
-    const options = this.optionsForContender(match.match_type)
+    const { match } = this.props;
+    const options = this.optionsForContender(match.match_type);
 
     // eslint-disable-next-line
     const id = Math.random();
     return (
-      <div key={id} className= "ui padded grid">
+      <div key={id} className="ui padded grid">
         <div className="one column row">
           <Dropdown
             id={c.id}
@@ -112,13 +132,22 @@ class ContendersForm extends React.Component {
   };
 
   render() {
-    const { data } = this.state;
-
+    const { data, errors } = this.state;
+    console.log(this.state);
     const { contenders } = data;
     return (
       <div>
         <br />
+        {/* {errors.contenders && <InlineError text={errors.contenders} />} */}
         <b> Contenders </b>
+        {errors.contenders && (
+          <div
+            className="ui red down  basic label"
+            style={{ backgroundColor: '#fff !important' }}
+          >
+            {errors.contenders}
+          </div>
+        )}
         {contenders.map(c => this.renderContenders(c))}
       </div>
     );

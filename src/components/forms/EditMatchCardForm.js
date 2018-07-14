@@ -98,11 +98,21 @@ class EditMatchCardForm extends React.Component {
 
   validate = data => {
     const errors = {};
+    const { entities } = this.props;
 
     if (!data.title) errors.title = "Can't be blank";
 
     _.forOwn(data.matches, (value, key) => {
+      // const contendersList = _.map(value.contenders, 'name');
+      console.log(value.contenders);
+      const entity = _.find(entities, { name: value.match_type });
       if (!value.name) errors[key] = { name: "Can't be blank" };
+      if (
+        value.contenders.length !== _.compact(value.contenders).length ||
+        _.compact(value.contenders).length === 0 ||
+        entity.contender_count !== value.contenders.length
+      )
+        errors[key] = { contenders: 'Contenders must be selected.' };
     });
 
     return errors;
@@ -125,23 +135,25 @@ class EditMatchCardForm extends React.Component {
       // TODO CATCH ERROR
     });
   };
-  
+
   handleContenderChange = (contenders, matchID) => {
-    const e = { target: {
-                id: matchID,
-                name: "contenders",
-                value: contenders
-              }
-            };
-            
-   this.changeMatchAttributes(e);
-  }
+    const e = {
+      target: {
+        id: matchID,
+        name: 'contenders',
+        value: contenders
+      }
+    };
+
+    this.changeMatchAttributes(e);
+  };
 
   renderMatchType = (matchType, key) => {
     const { entities } = this.props;
-    const options = _.filter(entities, 
-      {entity_type: 'Match'}
-    ).map(e => ({ value: e.name, text: e.name }));
+    const options = _.filter(entities, { entity_type: 'Match' }).map(e => ({
+      value: e.name,
+      text: e.name
+    }));
 
     return (
       <div className="field">
@@ -188,8 +200,18 @@ class EditMatchCardForm extends React.Component {
         <div className="ui grid">
           <div className="doubling two column row">
             <div className="left floated column">
-              <Form.Field error={!_.isEmpty(errors[key])}>
-                <label htmlFor="Name">Match Name</label>
+              <Form.Field error={_.get(errors[key], 'name')}>
+                <label htmlFor="Name">
+                  Match Name{_.get(errors[key], 'name') && (
+                    <div
+                      className="ui red left pointing basic label"
+                      style={{ backgroundColor: '#fff !important' }}
+                    >
+                      {errors[key].name}
+                    </div>
+                  )}
+                </label>
+
                 <input
                   type="text"
                   id={key}
@@ -198,14 +220,6 @@ class EditMatchCardForm extends React.Component {
                   defaultValue={matches[key].name}
                   onChange={this.changeMatchAttributes}
                 />
-                {!_.isEmpty(errors[key]) && (
-                  <div
-                    className="ui red left pointing basic label"
-                    style={{ backgroundColor: '#fff !important' }}
-                  >
-                    {errors[key].name}
-                  </div>
-                )}
                 {/* {!_.isEmpty(errors[key]) && <InlineError text={errors[key].name} />} */}
               </Form.Field>
             </div>
@@ -220,6 +234,7 @@ class EditMatchCardForm extends React.Component {
                 match={matches[key]}
                 entities={entities}
                 handleContenderChange={this.handleContenderChange}
+                cerrors={_.isEmpty(errors[key]) ? {} : errors[key]}
               />
             }
             {/* <div className="ui column padded">
