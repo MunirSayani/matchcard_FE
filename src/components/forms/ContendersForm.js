@@ -68,25 +68,25 @@ class ContendersForm extends React.Component {
   handleContenderChange = () => {
     const { handleContenderChange, match } = this.props;
     const { data } = this.state;
-    this.validate(data);
+    // this.validate(data);
     const contenderList = _.map(data.contenders, 'name');
     handleContenderChange(contenderList, match.id);
   };
 
-  validate = data => {
-    const errors = {};
-    const contendersList = _.map(data.contenders, 'name');
-    if (
-      Object.values(contendersList).length === _.compact(contendersList).length
-    ) {
-      console.log(contendersList);
-      console.log('good!');
-    } else {
-      console.log('bad!');
-    }
-    // if (!data.password) errors.password = "Can't be blank";
-    return errors;
-  };
+  // validate = data => {
+  //   const errors = {};
+  //   const contendersList = _.map(data.contenders, 'name');
+  //   if (
+  //     Object.values(contendersList).length === _.compact(contendersList).length
+  //   ) {
+  //     console.log(contendersList);
+  //     console.log('good!');
+  //   } else {
+  //     console.log('bad!');
+  //   }
+  //   // if (!data.password) errors.password = "Can't be blank";
+  //   return errors;
+  // };
 
   optionsForContender = matchType => {
     const { entities } = this.props;
@@ -133,7 +133,7 @@ class ContendersForm extends React.Component {
 
   render() {
     const { data, errors } = this.state;
-    console.log(this.state);
+    // console.log(this.state);
     const { contenders } = data;
     return (
       <div>

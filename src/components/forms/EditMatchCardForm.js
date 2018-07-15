@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Form, Button, Message, Dropdown } from 'semantic-ui-react';
 import ContendersForm from './ContendersForm';
+import MatchQuestionsForm from './MatchQuestionsForm';
 import InlineError from '../messages/InlineError';
 import { deleteMatch, createMatch } from '../../actions/match_card';
 
@@ -104,7 +105,7 @@ class EditMatchCardForm extends React.Component {
 
     _.forOwn(data.matches, (value, key) => {
       // const contendersList = _.map(value.contenders, 'name');
-      console.log(value.contenders);
+      // console.log(value.contenders);
       const entity = _.find(entities, { name: value.match_type });
       if (!value.name) errors[key] = { name: "Can't be blank" };
       if (
@@ -148,6 +149,18 @@ class EditMatchCardForm extends React.Component {
     this.changeMatchAttributes(e);
   };
 
+  handleQuestionChange = (questions, matchID) => {
+    const e = {
+      target: {
+        id: matchID,
+        name: 'questions',
+        value: questions
+      }
+    };
+
+    this.changeMatchAttributes(e);
+  };
+
   renderMatchType = (matchType, key) => {
     const { entities } = this.props;
     const options = _.filter(entities, { entity_type: 'Match' }).map(e => ({
@@ -185,7 +198,6 @@ class EditMatchCardForm extends React.Component {
 
   renderMatches = (matches, errors) => {
     const { entities } = this.props;
-    // console.log(entities);
 
     return Object.keys(matches).map(key => (
       <div className="ui padded segment center" key={key}>
@@ -235,6 +247,14 @@ class EditMatchCardForm extends React.Component {
                 entities={entities}
                 handleContenderChange={this.handleContenderChange}
                 cerrors={_.isEmpty(errors[key]) ? {} : errors[key]}
+              />
+            }
+            {
+              <MatchQuestionsForm
+                questions={matches[key].questions}
+                match={matches[key]}
+                entities={entities}
+                handleQuestionChange={this.handleQuestionChange}
               />
             }
             {/* <div className="ui column padded">
