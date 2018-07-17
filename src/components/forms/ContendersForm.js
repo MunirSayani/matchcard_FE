@@ -108,8 +108,8 @@ class ContendersForm extends React.Component {
     // eslint-disable-next-line
     const id = Math.random();
     return (
-      <div key={id} className="ui padded grid">
-        <div className="one column row">
+      <div key={id} className="four wide column">
+        <div>
           <Dropdown
             id={c.id}
             placeholder="Select..."
@@ -136,8 +136,7 @@ class ContendersForm extends React.Component {
     // console.log(this.state);
     const { contenders } = data;
     return (
-      <div>
-        <br />
+      <div className="padded column">
         {/* {errors.contenders && <InlineError text={errors.contenders} />} */}
         <b> Contenders </b>
         {errors.contenders && (
@@ -148,7 +147,10 @@ class ContendersForm extends React.Component {
             {errors.contenders}
           </div>
         )}
-        {contenders.map(c => this.renderContenders(c))}
+        <div className="ui stackable grid">
+          {contenders.map(c => this.renderContenders(c))}
+        </div>
+        <br />
       </div>
     );
   }

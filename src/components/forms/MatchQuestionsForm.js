@@ -70,45 +70,72 @@ class MatchQuestionsForm extends React.Component {
     handleQuestionChange(QuestionList, match.id);
   };
 
+  deleteQuestion = matchId => {
+    const { data } = this.state;
+    const { questions } = data;
+
+    const updatedQuestions = _.reject(questions, { id: matchId });
+
+    this.setState(
+      {
+        data: { questions: updatedQuestions }
+      },
+      () => this.handleQuestionChange()
+    );
+  };
+
   renderQuestions = q => {
     // eslint-disable-next-line
     // const id = Math.random();
     const { id, question } = q;
     return (
-      <div key={id} className="ui padded grid">
-        <Form.Field>
-          <label htmlFor="content">Content</label>
-          <input
-            type="text"
-            id={id}
-            name="content"
-            placeholder="your new content"
-            defaultValue={question.content}
-            onBlur={this.onChange}
+      <div key={id} className="ui stackable grid">
+        <div className="eight wide column">
+          <Form.Field>
+            <label htmlFor="content">Content</label>
+            <input
+              type="text"
+              id={id}
+              name="content"
+              placeholder="your new content"
+              defaultValue={question.content}
+              onBlur={this.onChange}
+            />
+          </Form.Field>
+        </div>
+        <div className="four wide column">
+          <Form.Field>
+            <label htmlFor="answer_type">Answer Type</label>
+            <input
+              type="text"
+              id={id}
+              name="answer_type"
+              placeholder="Choose.."
+              defaultValue={question.answer_type}
+              onBlur={this.onChange}
+            />
+          </Form.Field>
+        </div>
+        <div className="two wide column">
+          <Form.Field>
+            <label htmlFor="point_value">Point Value</label>
+            <input
+              type="text"
+              id={id}
+              name="point_value"
+              placeholder="Enter a number"
+              defaultValue={question.point_value}
+              onBlur={this.onChange}
+            />
+          </Form.Field>
+        </div>
+        <div className="two wide column">
+          <i
+            onClick={() => this.deleteQuestion(id)}
+            aria-hidden="true"
+            className="delete icon red link middle aligned"
           />
-        </Form.Field>
-        <Form.Field>
-          <label htmlFor="point_value">Point Value</label>
-          <input
-            type="text"
-            id={id}
-            name="point_value"
-            placeholder="your new point_value"
-            defaultValue={question.point_value}
-            onBlur={this.onChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label htmlFor="answer_type">Answer Type</label>
-          <input
-            type="text"
-            id={id}
-            name="answer_type"
-            placeholder="your new answer_type"
-            defaultValue={question.answer_type}
-            onBlur={this.onChange}
-          />
-        </Form.Field>
+        </div>
       </div>
     );
   };
@@ -117,11 +144,15 @@ class MatchQuestionsForm extends React.Component {
     const { data } = this.state;
     const { questions } = data;
 
-    console.log('data', data);
     return (
-      <div>
-        Match Questions Form
+      <div className="column">
+        {/* <br />
+        <div>
+          <b> Match Questions Form </b>
+        </div> */}
+
         {questions.map(q => this.renderQuestions(q))}
+        <br />
       </div>
     );
   }

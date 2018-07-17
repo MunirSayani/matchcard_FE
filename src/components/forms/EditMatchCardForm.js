@@ -129,6 +129,37 @@ class EditMatchCardForm extends React.Component {
     });
   };
 
+  newMatchQuestion = e => {
+    e.preventDefault();
+
+    // console.log(e.target);
+    // const { target } = e
+    const key = e.target.id;
+    const { data } = this.state;
+    const { matches } = data;
+    const { questions } = matches[key];
+
+    // const extendedQuestions = _.assign(questions, {
+    //   content: '',
+    //   point_value: 2,
+    //   answer_type: 'Superstar'
+    // });
+
+    // console.log(extendedQuestions)
+    const extendedQuestions = _.union(questions, [
+      {
+        content: '',
+        point_value: 2,
+        answer_type: 'Superstar'
+      }
+    ]);
+    // const { createMatch } = this.props;
+    // const { data } = this.state;
+
+    // console.log('hi');
+    this.handleQuestionChange(extendedQuestions, key);
+  };
+
   handleDeleteMatch = id => {
     const { deleteMatch } = this.props;
 
@@ -239,7 +270,7 @@ class EditMatchCardForm extends React.Component {
               {this.renderMatchType(matches[key].match_type, key)}
             </div>
           </div>
-          <div className="ui grid">
+          <div className="one column row">
             {
               <ContendersForm
                 contenders={matches[key].contenders}
@@ -249,6 +280,7 @@ class EditMatchCardForm extends React.Component {
                 cerrors={_.isEmpty(errors[key]) ? {} : errors[key]}
               />
             }
+
             {
               <MatchQuestionsForm
                 questions={matches[key].questions}
@@ -257,6 +289,11 @@ class EditMatchCardForm extends React.Component {
                 handleQuestionChange={this.handleQuestionChange}
               />
             }
+            <div className="ui column padded">
+              <Button id={key} onClick={this.newMatchQuestion}>
+                Add Question
+              </Button>
+            </div>
             {/* <div className="ui column padded">
               <Button onClick={() => this.newContender(key)}>
                 Add Contender
