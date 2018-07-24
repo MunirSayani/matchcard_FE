@@ -41,9 +41,9 @@ class ContendersForm extends React.Component {
 
   setContenderState(nextProps) {
     const { contenders, entities, match, cerrors } = nextProps;
-    const entity = _.find(entities, { name: match.match_type });
+    const entity = _.find(entities, { name: match.match_type, entity_type: "Match" });
     let designedContenders = [];
-
+    
     if (
       !_.isEmpty(contenders) &&
       entity.contender_count === contenders.length
@@ -91,9 +91,10 @@ class ContendersForm extends React.Component {
   optionsForContender = matchType => {
     const { entities } = this.props;
     const contenderType = _.result(
-      _.find(entities, { name: matchType }),
+      _.find(entities, { name: matchType, entity_type: "Match" }),
       'contender_type'
     );
+    
     const options = _.filter(entities, {
       entity_type: 'Contender',
       contender_type: contenderType
@@ -133,7 +134,6 @@ class ContendersForm extends React.Component {
 
   render() {
     const { data, errors } = this.state;
-    // console.log(this.state);
     const { contenders } = data;
     return (
       <div className="padded column">

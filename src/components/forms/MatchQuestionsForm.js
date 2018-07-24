@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Form } from 'semantic-ui-react';
+import { Form, Dropdown } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 // import update from 'immutability-helper';
 
@@ -22,12 +22,12 @@ class MatchQuestionsForm extends React.Component {
     const { data } = this.state;
     const { questions } = data;
     const { target } = e;
+    
+    console.log("target", target);
 
     // const index = questions.findIndex(q => q.id === target.id);
     const updatedQuestions = _.map(questions, q => {
       const stateItem = q;
-      console.log(stateItem.id);
-      console.log(target.id);
 
       // eslint-disable-next-line
       if (q.id == target.id) {
@@ -83,11 +83,29 @@ class MatchQuestionsForm extends React.Component {
       () => this.handleQuestionChange()
     );
   };
+  
+  optionsForAnswerType = () => {
+    const { entities } = this.props;
+    // const contenderType = _.result(
+    //   _.find(entities, { name: matchType, entity_type: "Answer type" }),
+    //   'contender_type'
+    // );
+    
+    const options = _.filter(entities, {
+      entity_type: "Answer Type"
+    }).map(e => ({ value: e.name, text: e.name }));
+    
+    return options;
+  };
 
   renderQuestions = q => {
     // eslint-disable-next-line
     // const id = Math.random();
     const { id, question } = q;
+    const answerTypeOptions = this.optionsForAnswerType();
+    
+    // console.log(answerTypeOptions);
+    
     return (
       <div key={id} className="ui stackable grid">
         <div className="eight wide column">
@@ -106,13 +124,24 @@ class MatchQuestionsForm extends React.Component {
         <div className="four wide column">
           <Form.Field>
             <label htmlFor="answer_type">Answer Type</label>
-            <input
-              type="text"
+            <Dropdown
               id={id}
+              placeholder="Select..."
               name="answer_type"
-              placeholder="Choose.."
+              selection
+              search
+              options={answerTypeOptions}
               defaultValue={question.answer_type}
-              onBlur={this.onChange}
+              onChange={(event, data) => {
+                const e = {
+                  target: {
+                    id: data.id,
+                    name: "answer_type",
+                    value: data.value
+                  }
+                };
+                this.onChange(e);
+              }}
             />
           </Form.Field>
         </div>
@@ -164,15 +193,15 @@ MatchQuestionsForm.propTypes = {
   //   id: PropTypes.number,
   //   name: PropTypes.string
   // }),
-  // entities: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     id: PropTypes.number,
-  //     name: PropTypes.string,
-  //     entity_type: PropTypes.string,
-  //     contender_count: PropTypes.number,
-  //     contender_type: PropTypes.string
-  //   })
-  // ).isRequired,
+  entities: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      entity_type: PropTypes.string,
+      contender_count: PropTypes.number,
+      contender_type: PropTypes.string
+    })
+  ).isRequired,
   match: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string.isRequired
