@@ -12,6 +12,7 @@ import UserRoute from './components/routes/UserRoute';
 import GuestRoute from './components/routes/GuestRoute';
 import TopNavigation from './components/navigation/TopNavigation';
 import EditMatchCardPage from './components/pages/EditMatchCardPage';
+import EntryPage from "./components/entry/EntryPage";
 import './styles/_app.scss';
 
 const App = ({ location }) => (
@@ -54,6 +55,12 @@ const App = ({ location }) => (
       path="/edit_match_card/:id"
       exact
       component={EditMatchCardPage}
+    />
+    <UserRoute 
+      location={location}
+      path="/entry/:id"
+      exact
+      component={EntryPage}
     />
   </div>
 );

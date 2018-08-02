@@ -1,26 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import FeaturedMatchCardsContainer from '../featured/FeaturedMatchCardsContainer';
 
+// eslint-disable-next-line
 class HomePage extends React.Component {
-  state = {};
-
   render() {
+    const { isAuthenticated } = this.props;
     return (
       <div>
-        <FeaturedMatchCardsContainer />
+        <FeaturedMatchCardsContainer isAuthenticated={isAuthenticated}/>
       </div>
     );
   }
 }
 
 HomePage.propTypes = {
-  // isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
-function mapStateToProps() {
+function mapStateToProps(state) {
   return {
-    // isAuthenticated: !!state.user.token
+    isAuthenticated: !!state.user.token
   };
 }
 

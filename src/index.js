@@ -22,7 +22,8 @@ if (localStorage.appJWT) {
   const user = {
     token: localStorage.appJWT,
     confirmed: payload.confirm,
-    email: payload.email
+    email: payload.email,
+    id: payload.sub
   };
   store.dispatch(userLoggedIn(user));
 }

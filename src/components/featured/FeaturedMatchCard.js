@@ -22,7 +22,17 @@ const FeaturedMatchCard = ({ matchcard }) => (
           {' '}
           Edit{' '}
         </Button>
+        <Button
+          as={Link}
+          // eslint-disable-next-line
+          to={'/entry/' + matchcard.id}
+          className="ui primary"
+        >
+          {' '}
+          Submit Entry{' '}
+        </Button>
       </div>
+      
     </div>
   </div>
 );

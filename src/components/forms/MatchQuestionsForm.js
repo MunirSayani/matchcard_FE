@@ -52,7 +52,7 @@ class MatchQuestionsForm extends React.Component {
     const desginedQuestions = _.map(
       questions,
       element => {
-        const q = { id: Math.random(), question: element };
+        const q = { question: element };
         return q;
       }
       //   _.extend({}, element, { id: Math.random() })
@@ -74,7 +74,10 @@ class MatchQuestionsForm extends React.Component {
     const { data } = this.state;
     const { questions } = data;
 
-    const updatedQuestions = _.reject(questions, { id: matchId });
+
+    const updatedQuestions = _.reject(questions, q => 
+      q.question.id === matchId
+    );
 
     this.setState(
       {
@@ -101,19 +104,19 @@ class MatchQuestionsForm extends React.Component {
   renderQuestions = q => {
     // eslint-disable-next-line
     // const id = Math.random();
-    const { id, question } = q;
+    const { question } = q;
     const answerTypeOptions = this.optionsForAnswerType();
     
     // console.log(answerTypeOptions);
     
     return (
-      <div key={id} className="ui stackable grid">
+      <div key={question.id} className="ui stackable grid">
         <div className="eight wide column">
           <Form.Field>
             <label htmlFor="content">Content</label>
             <input
               type="text"
-              id={id}
+              id={question.id}
               name="content"
               placeholder="your new content"
               defaultValue={question.content}
@@ -125,7 +128,7 @@ class MatchQuestionsForm extends React.Component {
           <Form.Field>
             <label htmlFor="answer_type">Answer Type</label>
             <Dropdown
-              id={id}
+              id={question.id}
               placeholder="Select..."
               name="answer_type"
               selection
@@ -150,7 +153,7 @@ class MatchQuestionsForm extends React.Component {
             <label htmlFor="point_value">Point Value</label>
             <input
               type="text"
-              id={id}
+              id={question.id}
               name="point_value"
               placeholder="Enter a number"
               defaultValue={question.point_value}
@@ -160,7 +163,7 @@ class MatchQuestionsForm extends React.Component {
         </div>
         <div className="two wide column">
           <i
-            onClick={() => this.deleteQuestion(id)}
+            onClick={() => this.deleteQuestion(question.id)}
             aria-hidden="true"
             className="delete icon red link middle aligned"
           />

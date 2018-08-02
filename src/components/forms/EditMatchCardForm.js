@@ -6,6 +6,7 @@ import { Form, Button, Message, Dropdown } from 'semantic-ui-react';
 import ContendersForm from './ContendersForm';
 import MatchQuestionsForm from './MatchQuestionsForm';
 import InlineError from '../messages/InlineError';
+import RandomID from '../../utils/RandomID'
 import { deleteMatch, createMatch } from '../../actions/match_card';
 
 class EditMatchCardForm extends React.Component {
@@ -148,6 +149,7 @@ class EditMatchCardForm extends React.Component {
     // console.log(extendedQuestions)
     const extendedQuestions = _.union(questions, [
       {
+        id: RandomID(),
         content: '',
         point_value: 2,
         answer_type: 'Superstar'
@@ -242,7 +244,7 @@ class EditMatchCardForm extends React.Component {
 
         <div className="ui grid">
           <div className="doubling two column row">
-            <div className="left floated column">
+            <div className="left floated twelve wide column">
               <Form.Field error={_.get(errors[key], 'name')}>
                 <label htmlFor="Name">
                   Match Name{_.get(errors[key], 'name') && (
@@ -266,7 +268,7 @@ class EditMatchCardForm extends React.Component {
                 {/* {!_.isEmpty(errors[key]) && <InlineError text={errors[key].name} />} */}
               </Form.Field>
             </div>
-            <div className="right floated column">
+            <div className="right floated four wide column">
               {this.renderMatchType(matches[key].match_type, key)}
             </div>
           </div>
